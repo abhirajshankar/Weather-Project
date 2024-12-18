@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>weather App - Easy Tutorials</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="card">
+      <div class="search">
+        <input type="text" placeholder="Enter City Name" spellcheck="false" />
+        <button><img src="images/search.png" /></button>
+      </div>
+
+      <div class="error">
+        <p>Invalid City Name</p>
+      </div>
+      <div class="weather">
+        <img src="Images/rain.png" class="weather-icon" />
+        <h1 class="temp">22°C</h1>
+        <h2 class="city">New York</h2>
+
+        <div class="details">
+          <div class="col">
+            <img src="Images/humidity.png" />
+            <div>
+              <p class="humidity"></p>
+              <p>Humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="Images/wind.png" />
+            <div>
+              <p class="wind"></p>
+              <p>Wind Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- https://api.openweathermap.org/data/2.5/weather?id=2950159&appid=66737b090a8535b241aef9301ceb3521 -->
+
+    
+    <script>
+      const apiKey = "66737b090a8535b241aef9301ceb3521";
+      const apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=";
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+      const weatherIcon = document.querySelector(".weather-icon");
+      
+      async function checkWeather(city) {
+          try {
+              const response = await fetch(`${apiUrl}${city}&appid=${apiKey}&units=metric`);
+      
+              if (response.status === 404) {
+                  document.querySelector(".error").style.display = "block";
+                  document.querySelector(".weather").style.display = "none";
+              } else {
+                  const data = await response.json();
+      
+                  document.querySelector(".city").innerHTML = data.name;
+                  document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+                  document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                  document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+      
+                  if (data.weather[0].main === "Clouds") {
+                      weatherIcon.src = "images/clouds.png";
+                  } else if (data.weather[0].main === "Clear") {
+                      weatherIcon.src = "images/clear.png";
+                  } else if (data.weather[0].main === "Rain") {
+                      weatherIcon.src = "images/rain.png";
+                  } else if (data.weather[0].main === "Drizzle") {
+                      weatherIcon.src = "images/drizzle.png";
+                  } else if (data.weather[0].main === "Mist") {
+                      weatherIcon.src = "images/mist.png";
+                  }
+      
+                  document.querySelector(".weather").style.display = "block";
+                  document.querySelector(".error").style.display = "none";
+              }
+          } catch (error) {
+              console.error("Error fetching weather data:", error);
+              document.querySelector(".error").style.display = "block";
+              document.querySelector(".weather").style.display = "none";
+          }
+      }
+      
+      searchBtn.addEventListener("click", () => {
+          const city = searchBox.value.trim();
+          if (city) {
+              checkWeather(city);
+          }
+      });
+      </script>
+      
+  </body>
+</html>
+
+<!-- 
+1 what is and charset: Character Set में प्रत्येक कैरेक्टर (जैसे A, B, 1, 2, !, ?, आदि) को एक विशेष कोड के साथ जोड़ा जाता है, जिसे कंप्यूटर द्वारा पहचाना जा सकता है।, 
+
+2 UTF- 8 :-(Unicode Transformation Format - 8-bit) is a variable-length character encoding for Unicode, using 1 to 4 bytes to represent a character.
+            It is compatible with ASCII for the first 128 characters (using 1 byte), but it can represent over a million characters using more bytes (up to 4).
+            UTF-8 is used extensively on the web, in file systems, and in programming languages because of its backward compatibility with ASCII and ability to handle a wide range of characters efficiently.
+
+3 what is <meta> :- The <meta> tag is used for providing metadata such as page descriptions, keywords, author information, and viewport settings.
+                    It helps improve SEO (Search Engine Optimization), user experience, and browser behavior.
+
+3 what is DOCTYPE :-  In HTML, <!DOCTYPE> (short for "Document Type Declaration") is a declaration that defines the document type and version of HTML 
+                      being used in a web page. It tells the browser which version of HTML the page is written in, which helps the browser render the
+                       page correctly.
+
+4 what is <head> :- the <head> element is a container for meta-information about the document. It comes before the <body> tag in the HTML structure 
+                    and is used to define information that typically isn't displayed directly on the web page but is crucial for the document's 
+                    functionality, search engine optimization (SEO)
+
+5 what is <body> :- In HTML, the <body> element contains the content of the web page that is visible to the users in the browser. This is where you place all the elements 
+                    such as text, images, links, videos, forms, and other media that are part of the page's presentation.
+
+6 what is rel? :- In <link> Tags (often in the <head> section): The rel attribute in the <link> tag specifies the relationship between the current 
+                    document and an external resource, such as a stylesheet, icon, or alternate version of the document.
+
+7 what is spell check : - It is used to check The Spelling in the Input feild
+
+8 what is display flex :-  need to do Practical.
+
+9 what is async function :- 
+10 what is await :- 
+11 what is fetch :- 
+12 what is queryselector :-
+13 what is addEventListener :- 
+    -->
